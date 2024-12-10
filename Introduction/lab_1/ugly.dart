@@ -1,17 +1,30 @@
 import 'dart:io';
 
-void main(){
+bool isUglyNumber(int num) {
+  if (num <= 0){
+    return false;
+  }
 
-  print("Enter the number = ");
-  int a = int.parse(stdin.readLineSync()!);
-  int flag = 0;
+  while (num % 2 == 0) {
+    num ~/= 2;
+  }
+  while (num % 3 == 0) {
+    num ~/= 3;
+  }
+  while (num % 5 == 0) {
+    num ~/= 5;
+  }
 
-  for(int i = 2 ; i <= a/2 ; i++){
-    if(!(a % 2 == 0 || a% 3 == 0 || a % 5 == 0)){
-      flag = 0;
-    }
-    else{
-      print("The number is not ugly");
-    }
+  return num == 1;
+}
+
+void main() {
+  print("Enter a number: ");
+  int number = int.parse(stdin.readLineSync()!);
+
+  if (isUglyNumber(number)) {
+    print("$number is an Ugly Number.");
+  } else {
+    print("$number is not an Ugly Number.");
   }
 }
