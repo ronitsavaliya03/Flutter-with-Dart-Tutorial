@@ -10,8 +10,8 @@ class BirthdayCard extends StatefulWidget {
 class _BirthdayCardState extends State<BirthdayCard> {
   TextEditingController pc = TextEditingController();
   String value = "";
-  String imagePath = ''; // Add a variable to hold the image path.
-
+  String imagePath = '';
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,7 +46,6 @@ class _BirthdayCardState extends State<BirthdayCard> {
               value,
               style: TextStyle(fontSize: 30, color: Colors.teal),
             ),
-            // Conditionally render the image if the path is not empty
             if (imagePath.isNotEmpty)
               Image.asset(
                 imagePath,
@@ -64,7 +63,7 @@ class _BirthdayCardState extends State<BirthdayCard> {
                 setState(() {
                   value = "Happy Birthday to you " + pc.text;
                   imagePath =
-                      "assets/images/img_3.png"; // Set the image path when the button is clicked.
+                      "assets/images/img_3.png"; 
                 });
               },
               child: Text("Click"),
