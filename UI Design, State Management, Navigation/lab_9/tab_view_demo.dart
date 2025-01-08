@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_labs/UI%20Design,%20State%20Management,%20Navigation/lab_10/validation.dart';
 import 'package:flutter_labs/UI%20Design,%20State%20Management,%20Navigation/lab_9/Tabs/about.dart';
 import 'package:flutter_labs/UI%20Design,%20State%20Management,%20Navigation/lab_9/Tabs/contact.dart';
 import 'package:flutter_labs/UI%20Design,%20State%20Management,%20Navigation/lab_9/Tabs/home.dart';
@@ -35,7 +36,7 @@ class _TabViewDemoState extends State<TabViewDemo> {
                 actions: [
                   ElevatedButton(onPressed: () {
                     Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => Home()));
+                        MaterialPageRoute(builder: (context) => Validation()));
                   }, child: Text("Ok")),
                   ElevatedButton(
                       onPressed: () {
