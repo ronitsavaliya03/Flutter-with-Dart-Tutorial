@@ -1,4 +1,8 @@
+import 'dart:js_interop';
+
 import 'package:flutter/material.dart';
+
+import '../lab_9/tab_view_demo.dart';
 
 class Validation extends StatefulWidget {
   Validation({super.key});
@@ -9,7 +13,7 @@ class Validation extends StatefulWidget {
 
 class _ValidationState extends State<Validation> {
   TextEditingController nameController = TextEditingController();
-
+  TextEditingController conPassController = TextEditingController();
   TextEditingController passController = TextEditingController();
 
   GlobalKey<FormState> _key = GlobalKey();
@@ -31,21 +35,22 @@ class _ValidationState extends State<Validation> {
         child: Column(
           children: [
             Container(
-              height: 400,
-              width: 300,
-              margin: EdgeInsets.all(20.0),
+              height: 450,
+              width: 400,
+              margin: EdgeInsets.all(40.0),
               decoration:  BoxDecoration(
-                color: Colors.lightBlue,
+                color: Colors.black87,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Form(
                 key: _key,
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(20.0),
                   child: Column(
                     children: [
-                      Text("Registration", style: TextStyle(color: Colors.white, fontSize: 40),),
+                      Text("Registration", style: TextStyle(color: Colors.white, fontSize: 30),),
                       Container(
+                        margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
                         decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(20)
@@ -53,6 +58,11 @@ class _ValidationState extends State<Validation> {
                         child: TextFormField(
                           validator: (value) {
                             if(value!.isEmpty){
+                              return "Enter username";
+                            }
+                            else if(!RegExp(
+                                r'^(?!.*\.\.)(?!.*\.$)[a-zA-Z0-9._]{1,30}$')
+                                .hasMatch(value)){
                               return "Enter valid username";
                             }
 
@@ -70,20 +80,22 @@ class _ValidationState extends State<Validation> {
                         ),
                       ),
                       SizedBox(
-                        height: 10,
+                        height: 20,
                       ),
                       Container(
                         decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20)
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20)
                         ),
                         child: TextFormField(
                           validator: (value) {
-                              if(value!.isEmpty){
-                                return "Enter valid password";
-                              }
-
-                              return null;
+                            if (value == null || value.isEmpty) {
+                              return "Please enter your password";
+                            }
+                            if (value.length < 6) {
+                              return "Password must be at least 6 characters long";
+                            }
+                            return null;
                           },
                           obscureText: isHide,
                           controller: passController,
@@ -103,14 +115,47 @@ class _ValidationState extends State<Validation> {
                         ),
                       ),
                       SizedBox(
-                        height: 30,
+                        height: 20,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20)
+                        ),
+                        child: TextFormField(
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please confirm your password";
+                            }
+                            if (value != passController.text) {
+                              return "Passwords do not match";
+                            }
+                            return null;
+                          },
+                          controller: conPassController,
+                          decoration: InputDecoration(
+                            labelText: 'Enter confirm password',
+                            labelStyle: TextStyle(color: Colors.grey),
+                            fillColor: Colors.white,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 40,
                       ),
                       ElevatedButton(
                         onPressed: () {
                           print('IS VALIDATE : ${_key.currentState!.validate()}');
+                          if(_key.currentState!.validate()==true){
+                            Navigator.of(context)
+                                .push(MaterialPageRoute(builder: (context) => TabViewDemo()));
+                          }
                         },
                         child: Text(
-                          'Submit',
+                          'Register',
                           style: TextStyle(
                             fontSize: 20,
                           ),
