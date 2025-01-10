@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_labs/Scrollable%20Widgets,%20Dialogs%20&%20State%20Management/lab_11/user_list_page.dart';
 import 'package:flutter_labs/UI%20Design,%20State%20Management,%20Navigation/lab_10/validation.dart';
 import 'package:flutter_labs/UI%20Design,%20State%20Management,%20Navigation/lab_9/Tabs/about.dart';
 import 'package:flutter_labs/UI%20Design,%20State%20Management,%20Navigation/lab_9/Tabs/contact.dart';
@@ -60,6 +61,15 @@ class _TabViewDemoState extends State<TabViewDemo> {
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => Home(),
+                ));
+              },
+            ),
+            ListTile(
+              title: Text("List of Users"),
+              leading: Icon(Icons.supervised_user_circle_outlined),
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => UserListPage(),
                 ));
               },
             ),
