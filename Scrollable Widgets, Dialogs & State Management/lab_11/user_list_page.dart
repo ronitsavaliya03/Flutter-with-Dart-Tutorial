@@ -79,7 +79,6 @@ class _UserListPageState extends State<UserListPage> {
                           return getListGridItem(index);
                         },
                         itemCount: _user.userList.length,
-                        // children: getListItem(),
                       ),
                     )
                   : Expanded(
@@ -106,64 +105,68 @@ class _UserListPageState extends State<UserListPage> {
   }
 
   Widget getListGridItem(i) {
-    return Card(
-      elevation: 10,
-      child: ListTile(
-          onTap: () {},
-          leading: Icon(Icons.account_circle_outlined),
-          trailing: Wrap(
-            alignment: WrapAlignment.center,
-            direction: Axis.horizontal,
-            children: [
-              IconButton(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return CupertinoAlertDialog(
-                        title: Text('DELETE'),
-                        content: Text('Are you sure want to delete?'),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              _user.deleteUser(id: i);
-                              Navigator.pop(context);
-                              setState(() {});
-                            },
-                            child: Text('yes'),
-                          ),
-                          TextButton(
-                            onPressed: () {},
-                            child: Text('No'),
-                          )
-                        ],
-                      );
-                    },
-                  );
-                },
-                icon: Icon(
-                  Icons.delete,
-                  color: Colors.red,
-                  size: 25,
+    return Expanded(
+      child: Card(
+        elevation: 10,
+        child: ListTile(
+            onTap: () {},
+            leading: Icon(Icons.account_circle_outlined),
+            trailing: Wrap(
+              alignment: WrapAlignment.center,
+              direction: Axis.horizontal,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return CupertinoAlertDialog(
+                          title: Text('DELETE'),
+                          content: Text('Are you sure want to delete?'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                _user.deleteUser(id: i);
+                                Navigator.pop(context);
+                                setState(() {});
+                              },
+                              child: Text('yes'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text('No'),
+                            )
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  icon: Icon(
+                    Icons.delete,
+                    color: Colors.red,
+                    size: 25,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
+            title: Wrap(
+              direction: Axis.vertical,
+              children: [
+                Text(
+                  '${_user.userList[i][NAME]}',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 5),
+                Text(
+                  '${_user.userList[i][CITY]} | ${_user.userList[i][EMAIL]}',
+                  style: TextStyle(fontSize: 12, color: Colors.grey),
+                ),
+              ],
+            ),
           ),
-          title: Wrap(
-            direction: Axis.vertical,
-            children: [
-              Text(
-                '${_user.userList[i][NAME]}',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 5),
-              Text(
-                '${_user.userList[i][CITY]} | ${_user.userList[i][EMAIL]}',
-                style: TextStyle(fontSize: 12, color: Colors.grey),
-              ),
-            ],
-          ),
-        ),
+      ),
     );
   }
 }
