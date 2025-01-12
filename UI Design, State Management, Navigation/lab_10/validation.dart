@@ -1,7 +1,5 @@
 import 'dart:js_interop';
-
 import 'package:flutter/material.dart';
-
 import '../lab_9/tab_view_demo.dart';
 
 class Validation extends StatefulWidget {
@@ -19,6 +17,7 @@ class _ValidationState extends State<Validation> {
   GlobalKey<FormState> _key = GlobalKey();
 
   bool isHide=true;
+  bool isRegister=true;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +47,7 @@ class _ValidationState extends State<Validation> {
                   padding: const EdgeInsets.all(20.0),
                   child: Column(
                     children: [
-                      Text("Registration", style: TextStyle(color: Colors.white, fontSize: 30),),
+                      Text(isRegister?"Registration":"Login", style: TextStyle(color: Colors.white, fontSize: 30),),
                       Container(
                         margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
                         decoration: BoxDecoration(
@@ -117,7 +116,9 @@ class _ValidationState extends State<Validation> {
                       SizedBox(
                         height: 20,
                       ),
-                      Container(
+                      Visibility(
+                        visible: isRegister,
+                        child: Container(
                         decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(20)
@@ -142,24 +143,57 @@ class _ValidationState extends State<Validation> {
                             ),
                           ),
                         ),
-                      ),
+                      ),),
                       SizedBox(
                         height: 40,
                       ),
-                      ElevatedButton(
-                        onPressed: () {
-                          print('IS VALIDATE : ${_key.currentState!.validate()}');
-                          if(_key.currentState!.validate()==true){
-                            Navigator.of(context)
-                                .push(MaterialPageRoute(builder: (context) => TabViewDemo()));
-                          }
-                        },
-                        child: Text(
-                          'Register',
-                          style: TextStyle(
-                            fontSize: 20,
-                          ),
-                        ),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () {
+                                print('IS VALIDATE : ${_key.currentState!.validate()}');
+
+                                setState(() {
+                                  isRegister=!isRegister;
+
+                                });
+                                if(_key.currentState!.validate()==true){
+                                  Navigator.of(context)
+                                      .push(MaterialPageRoute(builder: (context) => TabViewDemo()));
+                                }
+                              },
+                              child: Text(
+                                !isRegister?'Login':'Register',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 30,
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                print('IS VALIDATE : ${_key.currentState!.validate()}');
+
+                                setState(() {
+                                  isRegister=!isRegister;
+
+                                });
+                                if(_key.currentState!.validate()==true){
+                                  Navigator.of(context)
+                                      .push(MaterialPageRoute(builder: (context) => TabViewDemo()));
+                                }
+                              },
+                              child: Text(
+                                isRegister?'Login':'Register',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                ),
+                              ),
+                            )
+                          ],
                       )
                     ],
                   ),
