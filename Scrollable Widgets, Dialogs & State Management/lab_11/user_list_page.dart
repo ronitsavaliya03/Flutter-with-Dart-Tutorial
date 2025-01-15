@@ -23,7 +23,7 @@ class _UserListPageState extends State<UserListPage> {
       appBar: AppBar(
         backgroundColor: Colors.blue,
         title: Text(
-          'User Profiles',
+          'Students\' Profiles',
           style: TextStyle(
             fontSize: 20,
             color: Colors.white,
@@ -65,7 +65,7 @@ class _UserListPageState extends State<UserListPage> {
               ? Expanded(
                   child: Center(
                       child: Text(
-                    'No User Found',
+                    'No Student Found',
                     style: TextStyle(color: Colors.grey, fontSize: 15),
                   )),
                 )
@@ -79,6 +79,7 @@ class _UserListPageState extends State<UserListPage> {
                           return getListGridItem(index);
                         },
                         itemCount: _user.userList.length,
+                        // children: getListItem(),
                       ),
                     )
                   : Expanded(
@@ -105,67 +106,78 @@ class _UserListPageState extends State<UserListPage> {
   }
 
   Widget getListGridItem(i) {
-    return Expanded(
-      child: Card(
-        elevation: 10,
-        child: ListTile(
-            onTap: () {},
-            leading: Icon(Icons.account_circle_outlined),
-            trailing: Wrap(
-              alignment: WrapAlignment.center,
-              direction: Axis.horizontal,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return CupertinoAlertDialog(
-                          title: Text('DELETE'),
-                          content: Text('Are you sure want to delete?'),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                _user.deleteUser(id: i);
-                                Navigator.pop(context);
-                                setState(() {});
-                              },
-                              child: Text('yes'),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: Text('No'),
-                            )
-                          ],
-                        );
-                      },
+    return Card(
+      elevation: 10,
+      child: ListTile(
+        onTap: () {},
+        leading: Icon(Icons.account_circle_outlined),
+        trailing: Wrap(
+          alignment: WrapAlignment.center,
+          direction: Axis.horizontal,
+          children: [
+            IconButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return CupertinoAlertDialog(
+                      title: Text('DELETE'),
+                      content: Text('Are you sure want to delete?'),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            _user.deleteUser(id: i);
+                            Navigator.pop(context);
+                            setState(() {});
+                          },
+                          child: Text('Yes'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text('No'),
+                        )
+                      ],
                     );
                   },
-                  icon: Icon(
-                    Icons.delete,
-                    color: Colors.red,
-                    size: 25,
-                  ),
-                ),
-              ],
+                );
+              },
+              icon: Icon(
+                Icons.delete,
+                color: Colors.red,
+                size: 25,
+              ),
             ),
-            title: Wrap(
-              direction: Axis.vertical,
-              children: [
-                Text(
-                  '${_user.userList[i][NAME]}',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: 5),
-                Text(
-                  '${_user.userList[i][CITY]} | ${_user.userList[i][EMAIL]}',
-                  style: TextStyle(fontSize: 12, color: Colors.grey),
-                ),
-              ],
+            IconButton(
+                onPressed: (() {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => UserEntryFormPage(data: _user.userList[i],))).then((value){
+                        if(value != null){
+                          _user.userList[i] = value;
+                          setState(() {
+
+                          });
+                        }
+                  });
+                }),
+                icon: Icon(Icons.edit))
+          ],
+        ),
+        title: Wrap(
+          direction: Axis.vertical,
+          children: [
+            Text(
+              '${_user.userList[i][NAME]}',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-          ),
+            SizedBox(height: 5),
+            Text(
+              '${_user.userList[i][CITY]} | ${_user.userList[i][EMAIL]}',
+              style: TextStyle(fontSize: 12, color: Colors.grey),
+            ),
+          ],
+        ),
       ),
     );
   }
