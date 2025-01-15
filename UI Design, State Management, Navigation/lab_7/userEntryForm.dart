@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import '../../Static CRUD/constants.dart';
 
 class UserEntryFormPage extends StatefulWidget {
-  UserEntryFormPage({super.key});
+  Map<String,dynamic>? data ;
+  UserEntryFormPage({super.key,this.data});
 
   @override
   State<UserEntryFormPage> createState() => _UserEntryFormPageState();
@@ -13,17 +14,32 @@ class _UserEntryFormPageState extends State<UserEntryFormPage> {
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
+  bool isData=true;
 
   GlobalKey<FormState> _formKey = GlobalKey();
 
-  List<String> cities = ['London', 'Singapore', 'california', 'Oslo', 'Berlin'];
+  List<String> cities = ['London', 'Singapore', 'California', 'Oslo', 'Berlin'];
   String? selectedCity;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    if(widget.data != null){
+      isData=false;
+      nameController.text = widget.data![NAME];
+      emailController.text = widget.data![EMAIL];
+      phoneController.text = widget.data![PHONE];
+
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.lightBlueAccent,
+        backgroundColor: Colors.blue,
         title: Text(
           'Registration',
           style: TextStyle(color: Colors.white),
@@ -131,10 +147,10 @@ class _UserEntryFormPageState extends State<UserEntryFormPage> {
                   map[EMAIL] = emailController.text.toString();
                   map[PHONE] = phoneController.text.toString();
                   map[CITY] = selectedCity.toString();
-                  Navigator.pop(context, map);
+                  Navigator.pop(context,map);
                 },
                 child: Text(
-                  'Create',
+                 !isData ?  'Edit' : 'Create',
                   style: TextStyle(
                     fontSize: 20,
                   ),
