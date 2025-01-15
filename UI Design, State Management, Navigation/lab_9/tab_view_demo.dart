@@ -1,99 +1,184 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_labs/Scrollable%20Widgets,%20Dialogs%20&%20State%20Management/lab_11/user_list_page.dart';
-import 'package:flutter_labs/UI%20Design,%20State%20Management,%20Navigation/lab_10/validation.dart';
-import 'package:flutter_labs/UI%20Design,%20State%20Management,%20Navigation/lab_9/Tabs/about.dart';
-import 'package:flutter_labs/UI%20Design,%20State%20Management,%20Navigation/lab_9/Tabs/contact.dart';
-import 'package:flutter_labs/UI%20Design,%20State%20Management,%20Navigation/lab_9/Tabs/home.dart';
+import 'package:flutter_labs/Static%20CRUD/constants.dart';
+import 'package:flutter_labs/Static%20CRUD/user.dart';
+import 'package:flutter_labs/UI%20Design,%20State%20Management,%20Navigation/lab_7/userEntryForm.dart';
+import 'package:flutter/widgets.dart';
 
-class TabViewDemo extends StatefulWidget {
-  const TabViewDemo({super.key});
+class UserListPage extends StatefulWidget {
+  const UserListPage({super.key});
 
   @override
-  State<TabViewDemo> createState() => _TabViewDemoState();
+  State<UserListPage> createState() => _UserListPageState();
 }
 
-class _TabViewDemoState extends State<TabViewDemo> {
+class _UserListPageState extends State<UserListPage> {
+  User _user = User();
+
+  bool isGrid = false;
+
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(length: 3, child: Scaffold(
+    return Scaffold(
       appBar: AppBar(
-        bottom: TabBar(tabs: [
-          Tab(
-            text: "Home",
+        backgroundColor: Colors.blue,
+        title: Text(
+          'Students\' Profiles',
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.white,
           ),
-          Tab(
-            text: "Contact",
-          ),
-          Tab(
-            text: "About",
-          ),
-        ]),
+        ),
         actions: [
-          IconButton(onPressed: () {
-            showDialog(context: context, builder: (context) {
-              return AlertDialog(
-                title: Text("Are you sure?"),
-                content: Text("Content"),
-                actions: [
-                  ElevatedButton(onPressed: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => Validation()));
-                  }, child: Text("Ok")),
-                  ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Text("Cancel"))
-                ],
-              );
-            });
-          }, icon: Icon(Icons.logout))
+          IconButton(
+            onPressed: () {
+              setState(() {
+                isGrid = !isGrid; // Toggle between Grid and List
+              });
+            },
+            icon: Icon(
+              isGrid ? Icons.list : Icons.grid_3x3,
+              color: Colors.white,
+            ),
+          ),
+          IconButton(
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (context) {
+                    return UserEntryFormPage();
+                  },
+                )).then((value) {
+                  _user.userList.add(value);
+                  setState(() {});
+                });
+              },
+              icon: Icon(
+                Icons.add,
+                color: Colors.white,
+              )),
         ],
       ),
-      body: TabBarView(children: [Home(), Contact(), About()]),
-      drawer: Drawer(
-        child: Column(
+      body: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          _user.userList.isEmpty
+              ? Expanded(
+                  child: Center(
+                      child: Text(
+                    'No Student Found',
+                    style: TextStyle(color: Colors.grey, fontSize: 15),
+                  )),
+                )
+              : (isGrid
+                  ? Expanded(
+                      child: GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 4),
+                        itemBuilder: (context, index) {
+                          print(':::GRID ITEM BUILDER CALLED:::$index');
+                          return getListGridItem(index);
+                        },
+                        itemCount: _user.userList.length,
+                        // children: getListItem(),
+                      ),
+                    )
+                  : Expanded(
+                      child: ListView.builder(
+                        itemBuilder: (BuildContext context, int index) {
+                          print(':::LISTVIEW ITEM BUILDER CALLED:::$index');
+                          return getListGridItem(index);
+                        },
+                        itemCount: _user.userList.length,
+                      ),
+                    )),
+        ],
+      ),
+    );
+  }
+
+  List<Widget> getListItem() {
+    List<Widget> widgets = [];
+    for (int i = 0; i < _user.userList.length; i++) {
+      print(':::GRID ITEM BUILDER CALLED:::$i');
+      widgets.add(getListGridItem(i));
+    }
+    return widgets;
+  }
+
+  Widget getListGridItem(i) {
+    return Card(
+      elevation: 10,
+      child: ListTile(
+        onTap: () {},
+        leading: Icon(Icons.account_circle_outlined),
+        trailing: Wrap(
+          alignment: WrapAlignment.center,
+          direction: Axis.horizontal,
           children: [
-            DrawerHeader(child: Text("Index")),
-            ListTile(
-              title: Text("Home"),
-              leading: Icon(Icons.home_outlined),
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => Home(),
-                ));
+            IconButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return CupertinoAlertDialog(
+                      title: Text('DELETE'),
+                      content: Text('Are you sure want to delete?'),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            _user.deleteUser(id: i);
+                            Navigator.pop(context);
+                            setState(() {});
+                          },
+                          child: Text('Yes'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text('No'),
+                        )
+                      ],
+                    );
+                  },
+                );
               },
+              icon: Icon(
+                Icons.delete,
+                color: Colors.red,
+                size: 25,
+              ),
             ),
-            ListTile(
-              title: Text("List of Users"),
-              leading: Icon(Icons.supervised_user_circle_outlined),
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => UserListPage(),
-                ));
-              },
+            IconButton(
+                onPressed: (() {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => UserEntryFormPage(data: _user.userList[i],))).then((value){
+                        if(value != null){
+                          _user.userList[i] = value;
+                          setState(() {
+
+                          });
+                        }
+                  });
+                }),
+                icon: Icon(Icons.edit))
+          ],
+        ),
+        title: Wrap(
+          direction: Axis.vertical,
+          children: [
+            Text(
+              '${_user.userList[i][NAME]}',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            ListTile(
-              title: Text("About"),
-              leading: Icon(Icons.account_circle_outlined),
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => About(),
-                ));
-              },
+            SizedBox(height: 5),
+            Text(
+              '${_user.userList[i][CITY]} | ${_user.userList[i][EMAIL]}',
+              style: TextStyle(fontSize: 12, color: Colors.grey),
             ),
-            ListTile(
-              title: Text("Contact"),
-              leading: Icon(Icons.contact_support_outlined),
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => Contact(),
-                ));
-              },
-            )
           ],
         ),
       ),
-    ));
+    );
   }
 }
