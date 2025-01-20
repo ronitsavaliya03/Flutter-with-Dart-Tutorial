@@ -83,7 +83,8 @@ class _UserListPageState extends State<UserListPage> {
           SizedBox(
             height: 25,
           ),
-          _user.display().isEmpty || (searchDetails.text != '' && _user.searchResultList.isEmpty)
+          _user.display().isEmpty ||
+                  (searchDetails.text != '' && _user.searchResultList.isEmpty)
               ? Expanded(
                   child: Center(
                       child: Text(
@@ -100,7 +101,9 @@ class _UserListPageState extends State<UserListPage> {
                           print(':::GRID ITEM BUILDER CALLED:::$index');
                           return getListGridItem(index);
                         },
-                        itemCount: searchDetails.text == '' ? _user.userList.length : _user.searchResultList.length,
+                        itemCount: searchDetails.text == ''
+                            ? _user.userList.length
+                            : _user.searchResultList.length,
                       ),
                     )
                   : Expanded(
@@ -109,7 +112,10 @@ class _UserListPageState extends State<UserListPage> {
                           print(':::LISTVIEW ITEM BUILDER CALLED:::$index');
                           return getListGridItem(index);
                         },
-                        itemCount: searchDetails.text == '' ? _user.userList.length : _user.searchResultList.length,                      ),
+                        itemCount: searchDetails.text == ''
+                            ? _user.userList.length
+                            : _user.searchResultList.length,
+                      ),
                     )),
         ],
       ),
@@ -163,9 +169,9 @@ class _UserListPageState extends State<UserListPage> {
                 onPressed: (() {
                   Navigator.of(context)
                       .push(MaterialPageRoute(
-                      builder: (context) => UserEntryFormPage(
-                        data: _user.userList[i],
-                      )))
+                          builder: (context) => UserEntryFormPage(
+                                data: _user.userList[i],
+                              )))
                       .then((value) {
                     if (value != null) {
                       _user.userList[i] = value;
@@ -191,5 +197,4 @@ class _UserListPageState extends State<UserListPage> {
       ),
     );
   }
-
 }
