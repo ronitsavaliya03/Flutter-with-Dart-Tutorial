@@ -15,6 +15,7 @@ class UserListPage extends StatefulWidget {
 class _UserListPageState extends State<UserListPage> {
   User _user = User();
 
+  TextEditingController searchDetails = TextEditingController();
   bool isGrid = false;
 
   @override
@@ -61,7 +62,28 @@ class _UserListPageState extends State<UserListPage> {
       body: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
-          _user.userList.isEmpty
+          SizedBox(
+            height: 20,
+          ),
+          TextFormField(
+            controller: searchDetails,
+            onChanged: (value) {
+              _user.searchDeatil(searchData: value);
+              setState(() {});
+            },
+            decoration: InputDecoration(
+                hintText: 'Search',
+                prefixIcon: Icon(
+                  Icons.search_rounded,
+                  size: 25,
+                ),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12))),
+          ),
+          SizedBox(
+            height: 25,
+          ),
+          _user.display().isEmpty || (searchDetails.text != '' && _user.searchResultList.isEmpty)
               ? Expanded(
                   child: Center(
                       child: Text(
@@ -78,8 +100,7 @@ class _UserListPageState extends State<UserListPage> {
                           print(':::GRID ITEM BUILDER CALLED:::$index');
                           return getListGridItem(index);
                         },
-                        itemCount: _user.userList.length,
-                        // children: getListItem(),
+                        itemCount: searchDetails.text == '' ? _user.userList.length : _user.searchResultList.length,
                       ),
                     )
                   : Expanded(
@@ -88,21 +109,11 @@ class _UserListPageState extends State<UserListPage> {
                           print(':::LISTVIEW ITEM BUILDER CALLED:::$index');
                           return getListGridItem(index);
                         },
-                        itemCount: _user.userList.length,
-                      ),
+                        itemCount: searchDetails.text == '' ? _user.userList.length : _user.searchResultList.length,                      ),
                     )),
         ],
       ),
     );
-  }
-
-  List<Widget> getListItem() {
-    List<Widget> widgets = [];
-    for (int i = 0; i < _user.userList.length; i++) {
-      print(':::GRID ITEM BUILDER CALLED:::$i');
-      widgets.add(getListGridItem(i));
-    }
-    return widgets;
   }
 
   Widget getListGridItem(i) {
@@ -146,39 +157,39 @@ class _UserListPageState extends State<UserListPage> {
               icon: Icon(
                 Icons.delete,
                 color: Colors.red,
-                size: 25,
               ),
             ),
             IconButton(
                 onPressed: (() {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => UserEntryFormPage(data: _user.userList[i],))).then((value){
-                        if(value != null){
-                          _user.userList[i] = value;
-                          setState(() {
-
-                          });
-                        }
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(
+                      builder: (context) => UserEntryFormPage(
+                        data: _user.userList[i],
+                      )))
+                      .then((value) {
+                    if (value != null) {
+                      _user.userList[i] = value;
+                      setState(() {});
+                    }
                   });
                 }),
                 icon: Icon(Icons.edit))
           ],
         ),
-        title: Wrap(
-          direction: Axis.vertical,
-          children: [
-            Text(
-              '${_user.userList[i][NAME]}',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 5),
-            Text(
-              '${_user.userList[i][CITY]} | ${_user.userList[i][EMAIL]}',
-              style: TextStyle(fontSize: 12, color: Colors.grey),
-            ),
-          ],
+        title: Text(
+          searchDetails.text == ''
+              ? '${_user.userList[i][NAME]}'
+              : '${_user.searchResultList[i][NAME]}',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        subtitle: Text(
+          searchDetails.text == ''
+              ? '${_user.userList[i][EMAIL]} | ${_user.userList[i][CITY]}'
+              : '${_user.searchResultList[i][EMAIL]} | ${_user.searchResultList[i][CITY]}',
+          style: TextStyle(fontSize: 12, color: Colors.grey),
         ),
       ),
     );
   }
+
 }
