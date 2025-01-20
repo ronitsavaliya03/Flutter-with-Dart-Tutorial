@@ -14,7 +14,6 @@ class _UserEntryFormPageState extends State<UserEntryFormPage> {
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
-  bool isData=true;
 
   GlobalKey<FormState> _formKey = GlobalKey();
 
@@ -27,7 +26,6 @@ class _UserEntryFormPageState extends State<UserEntryFormPage> {
     super.initState();
 
     if(widget.data != null){
-      isData=false;
       nameController.text = widget.data![NAME];
       emailController.text = widget.data![EMAIL];
       phoneController.text = widget.data![PHONE];
@@ -150,7 +148,7 @@ class _UserEntryFormPageState extends State<UserEntryFormPage> {
                   Navigator.pop(context,map);
                 },
                 child: Text(
-                 !isData ?  'Edit' : 'Create',
+                 widget.data != null ?  'Edit' : 'Create',
                   style: TextStyle(
                     fontSize: 20,
                   ),
