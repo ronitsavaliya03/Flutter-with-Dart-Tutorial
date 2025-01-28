@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_labs/Crud%20UI/form.dart';
+import 'package:flutter_labs/UI%20Design,%20State%20Management,%20Navigation/lab_6/design2.dart';
 import 'package:flutter_labs/UI%20Design,%20State%20Management,%20Navigation/lab_9/Tabs/home.dart';
 
 class About extends StatelessWidget {
@@ -10,8 +12,13 @@ class About extends StatelessWidget {
       appBar: AppBar(),
       body: Column(
         children: [
-          Text("Learn", style: TextStyle(fontSize: 20),),
-          SizedBox(height: 20,),
+          Text(
+            "Learn",
+            style: TextStyle(fontSize: 20),
+          ),
+          SizedBox(
+            height: 20,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -70,6 +77,18 @@ class About extends StatelessWidget {
               ),
             ],
           ),
+          SizedBox(
+            height: 50,
+          ),
+          ElevatedButton(
+              onPressed: () {
+                showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return Design2();
+                    });
+              },
+              child: Text("Show"))
         ],
       ),
     );
