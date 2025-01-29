@@ -1,5 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_labs/UI%20Design,%20State%20Management,%20Navigation/lab_6/design2.dart';
+import 'package:flutter_labs/Crud%20UI/form.dart';
+import 'package:flutter_labs/Crud%20UI/list.dart';
+import 'package:flutter_labs/Database%20Connectivity%20&%20Navigation/lab_14/demo.dart';
+import 'package:flutter_labs/Scrollable%20Widgets,%20Dialogs%20&%20State%20Management/lab_11/user_list_page.dart';
+import 'package:flutter_labs/Scrollable%20Widgets,%20Dialogs%20&%20State%20Management/lab_13/bottom_navbar.dart';
+import 'package:flutter_labs/UI%20Design,%20State%20Management,%20Navigation/lab_10/validation.dart';
+import 'package:flutter_labs/UI%20Design,%20State%20Management,%20Navigation/lab_7/userEntryForm.dart';
+import 'package:flutter_labs/UI%20Design,%20State%20Management,%20Navigation/lab_8/birthday_card.dart';
+import 'package:flutter_labs/UI%20Design,%20State%20Management,%20Navigation/lab_8/image_demo.dart';
+import 'package:flutter_labs/UI%20Design,%20State%20Management,%20Navigation/lab_9/Tabs/about.dart';
+import 'package:flutter_labs/UI%20Design,%20State%20Management,%20Navigation/lab_9/Tabs/contact.dart';
+import 'package:flutter_labs/UI%20Design,%20State%20Management,%20Navigation/lab_9/Tabs/home.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -13,6 +25,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -32,7 +45,14 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: Design2()
+      // home: BirthdayCard()
+      routes: {
+        "/": (context)=>NavigationDemo(),
+        "/home": (context)=>Home(),
+        "/contact": (context)=>Contact(),
+        "/about": (context)=>About()
+      },
+      initialRoute: "/",
     );
   }
 }
