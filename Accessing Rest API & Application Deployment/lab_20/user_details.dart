@@ -24,51 +24,54 @@ class UserDetails extends StatelessWidget {
             return Center(child: Text("Error: ${snapshot.error}"));
           }
           UserModel user= snapshot.data!;
-          return Card(
-            elevation: 4,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    user.companyName.toString(),
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+          return SizedBox(
+            width: double.infinity,
+            child: Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      user.companyName.toString(),
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    "Date: ${user.date.toString()}",
-                    style: const TextStyle(color: Colors.grey),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    "Amount: \$${user.amount.toString()}",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: user.status.toString() == "deposit" ? Colors.green : Colors.red,
+                    const SizedBox(height: 8),
+                    Text(
+                      "Date: ${user.date.toString()}",
+                      style: const TextStyle(color: Colors.grey),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    user.description.toString(),
-                    style: const TextStyle(fontSize: 14),
-                  ),
-                  const SizedBox(height: 8),
-                  Chip(
-                    label: Text(
-                      user.status.toString().toUpperCase(),
-                      style: const TextStyle(color: Colors.white),
+                    const SizedBox(height: 8),
+                    Text(
+                      "Amount: \$${user.amount.toString()}",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: user.status.toString() == "deposit" ? Colors.green : Colors.red,
+                      ),
                     ),
-                    backgroundColor: user.status.toString() == "deposit" ? Colors.green : Colors.red,
-                  ),
-                ],
+                    const SizedBox(height: 8),
+                    Text(
+                      user.description.toString(),
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                    const SizedBox(height: 8),
+                    Chip(
+                      label: Text(
+                        user.status.toString().toUpperCase(),
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                      backgroundColor: user.status.toString() == "deposit" ? Colors.green : Colors.red,
+                    ),
+                  ],
+                ),
               ),
             ),
           );
