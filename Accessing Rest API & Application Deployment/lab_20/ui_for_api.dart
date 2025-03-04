@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:new_flutter_labs/Accessing%20Rest%20API%20&%20Application%20Deployment/lab_19/user_model.dart';
 import 'package:new_flutter_labs/Accessing%20Rest%20API%20&%20Application%20Deployment/lab_20/api_service.dart';
@@ -12,6 +13,8 @@ class UiForApi extends StatefulWidget {
 
 class _UiForApiState extends State<UiForApi> {
   ApiService apiService= ApiService();
+  TextEditingController _nameController= TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,7 +60,47 @@ class _UiForApiState extends State<UiForApi> {
                       style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                     ),
                     subtitle: Text("Status: ${users[index].status}"),
-                    trailing: const Icon(Icons.arrow_forward_ios, color: Colors.blueAccent),
+                    trailing: SizedBox(
+                      width: 75,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: Icon(Icons.delete, color: Colors.red,),
+                            onPressed: (){
+                              showDialog(context: context, builder: (context){
+                                return CupertinoAlertDialog(
+                                  title: Text("Delete", style: TextStyle(color: Colors.red),),
+                                  content: Text("Are you sure want to delete?"),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text("Cancel"),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        apiService.deleteUser(users[index].id.toString());
+                                        setState(() {
+
+                                        });
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text("Delete", style: TextStyle(color: Colors.red),),
+                                    ),
+                                  ],
+                                );
+                              }) ;
+
+                            },
+                          ),
+                          SizedBox(width: 5,),
+                          Icon(Icons.arrow_forward_ios, color: Colors.grey,)
+                        ],
+                      ),
+                    )
+
                   ),
                 ),
               );
@@ -65,6 +108,36 @@ class _UiForApiState extends State<UiForApi> {
           );
         },
       ),
+      floatingActionButton: FloatingActionButton(child: Icon(Icons.add),
+          onPressed: (){
+        showDialog(context: context, builder: (context){
+          return AlertDialog(
+            title: Text("Enter Text"),
+            content: TextField(
+              controller: _nameController,
+              decoration: InputDecoration(hintText: "Type here..."),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("Cancel"),
+              ),
+              TextButton(
+                onPressed: () {
+                  apiService.addUser(UserModel(id: "12345", companyName: _nameController.text));
+                  setState(() {
+
+                  });
+                  Navigator.pop(context); 
+                },
+                child: Text("Add"),
+              ),
+            ],
+          );
+        }) ;
+      }),
     );
   }
 }
