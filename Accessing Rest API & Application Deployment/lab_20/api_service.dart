@@ -24,4 +24,17 @@ class ApiService{
     UserModel user = UserModel.toUser(data);
     return user;
   }
+
+  Future<void> addUser(UserModel user) async{
+    var res = await http.post(Uri.parse(baseUrl),
+        body: user.toMap()
+    );
+
+    print(res.body);
+    print(res.statusCode);
+  }
+
+  Future<void> deleteUser(String id) async{
+    var res= await http.delete(Uri.parse("$baseUrl/$id"));
+  }
 }
