@@ -34,6 +34,15 @@ class ApiService{
     print(res.statusCode);
   }
 
+  Future<void> updateUser(UserModel user) async{
+    var res = await http.put(Uri.parse("$baseUrl/$user.id"),
+        body: user.toMap()
+    );
+
+    print(res.body);
+    print(res.statusCode);
+  }
+
   Future<void> deleteUser(String id) async{
     var res= await http.delete(Uri.parse("$baseUrl/$id"));
   }
