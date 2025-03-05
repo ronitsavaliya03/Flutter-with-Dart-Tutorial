@@ -61,7 +61,7 @@ class _UiForApiState extends State<UiForApi> {
                     ),
                     subtitle: Text("Status: ${users[index].status}"),
                     trailing: SizedBox(
-                      width: 75,
+                      width: 100,
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -80,12 +80,12 @@ class _UiForApiState extends State<UiForApi> {
                                       child: Text("Cancel"),
                                     ),
                                     TextButton(
-                                      onPressed: () {
-                                        apiService.deleteUser(users[index].id.toString());
+                                      onPressed: () async {
+                                        await apiService.deleteUser(users[index].id.toString());
                                         setState(() {
 
                                         });
-                                        Navigator.pop(context);
+                                        Navigator.pop(context); 
                                       },
                                       child: Text("Delete", style: TextStyle(color: Colors.red),),
                                     ),
@@ -96,11 +96,42 @@ class _UiForApiState extends State<UiForApi> {
                             },
                           ),
                           SizedBox(width: 5,),
-                          Icon(Icons.arrow_forward_ios, color: Colors.grey,)
+                          IconButton(
+                              onPressed: (){
+                                _nameController.text=users[index].companyName!;
+                                showDialog(context: context, builder: (context){
+                                  return AlertDialog(
+                                    title: Text("Enter Text"),
+                                    content: TextField(
+                                      controller: _nameController,
+                                      decoration: InputDecoration(hintText: "Type here..."),
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text("Cancel"),
+                                      ),
+                                      TextButton(
+                                        onPressed: () async {
+                                          await apiService.updateUser(UserModel(id: users[index].id, companyName: _nameController.text));
+                                          setState(() {
+
+                                          });
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text("Update"),
+                                      ),
+                                    ],
+                                  );
+                                }) ;
+
+                              }
+                          , icon: Icon(Icons.edit, color: Colors.grey,))
                         ],
                       ),
                     )
-
                   ),
                 ),
               );
@@ -108,7 +139,9 @@ class _UiForApiState extends State<UiForApi> {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(child: Icon(Icons.add),
+      floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          backgroundColor: Colors.blue,
           onPressed: (){
         showDialog(context: context, builder: (context){
           return AlertDialog(
@@ -125,8 +158,9 @@ class _UiForApiState extends State<UiForApi> {
                 child: Text("Cancel"),
               ),
               TextButton(
-                onPressed: () {
-                  apiService.addUser(UserModel(id: "12345", companyName: _nameController.text));
+                onPressed: () async {
+                  await apiService.addUser(UserModel(id: "12345", companyName: _nameController.text));
+                  _nameController.clear();
                   setState(() {
 
                   });
